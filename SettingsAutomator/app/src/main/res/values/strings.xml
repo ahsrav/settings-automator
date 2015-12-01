@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">SettingsAutomator</string>
+    <string name="select_filter">Select a filter</string>
+    <string name="add_filter_plus">+</string>
+    <string name="type_of_trigger">Type of trigger</string>
+    <string name="select_trigger">Trigger</string>
+    <string name="device_volume">Device Volume</string>
+    <string name="filter_name">Filter Name</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="device_brightness">Device brightness</string>
+    <string name="lock_screen_mode">Lock Screen Mode</string>
+    <string name="media_volume">Media Volume</string>
+    <string name="alarm_volume">Alarm Volume</string>
+    <string name="wifi">Wifi</string>
+    <string name="gps">GPS</string>
+</resources>

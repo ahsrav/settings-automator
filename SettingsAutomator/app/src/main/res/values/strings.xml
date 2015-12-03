@@ -13,4 +13,7 @@
     <string name="alarm_volume">Alarm Volume</string>
     <string name="wifi">Wifi</string>
     <string name="gps">GPS</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_filter_name">Enter filter name</string>
 </resources>

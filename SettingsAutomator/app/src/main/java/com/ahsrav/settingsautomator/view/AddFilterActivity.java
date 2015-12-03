@@ -1,24 +1,32 @@
 package com.ahsrav.settingsautomator.view;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.ahsrav.settingsautomator.R;
+import com.ahsrav.settingsautomator.fragment.TextViewDialogFragment;
+import com.ahsrav.settingsautomator.model.FilterInfo;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AddFilterActivity extends FragmentActivity {
+
+    public FilterInfo currentFilterInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_filter);
-
+        currentFilterInfo = new FilterInfo();
+        ButterKnife.bind(this);
     }
 
     @OnClick (R.id.filterName)
     public void enterFilterName() {
-
+        DialogFragment newFragment = new TextViewDialogFragment();
+        newFragment.show(getSupportFragmentManager(), "filterName");
     }
 
     @OnClick (R.id.triggerType)

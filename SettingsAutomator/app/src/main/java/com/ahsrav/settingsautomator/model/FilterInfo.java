@@ -4,14 +4,21 @@ package com.ahsrav.settingsautomator.model;
 public class FilterInfo {
 
     public String filterName;
-    public String triggerType;
+    public int triggerType;
     public String trigger;
-    public Boolean bluetoothOnOff;
-    public Boolean gpsOnOff;
-    public Boolean wifiOnOff;
-    public Integer deviceVolume;
-    public Integer alarmVolume;
-    public Integer mediaVolume;
+    public int bluetoothOnOff;
+    public int gpsOnOff;
+    public int wifiOnOff;
+    public int deviceVolume;
+    public int alarmVolume;
+    public int mediaVolume;
     public String lockScreenMode;
-    public Integer deviceBrightness;
+    public int deviceBrightness;
+
+    public FilterInfo() {
+        triggerType = -1;
+        bluetoothOnOff = -1;
+        gpsOnOff = -1;
+        wifiOnOff = -1;
+    }
 }

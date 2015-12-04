@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="triggerTypes">
+        <item>Wifi</item>
+        <item>Bluetooth</item>
+        <item>NFC</item>
+    </string-array>
+    <string-array name="onOffNoChange">
+        <item>On</item>
+        <item>Off</item>
+        <item>Leave Unchanged</item>
+    </string-array>
+
+</resources>

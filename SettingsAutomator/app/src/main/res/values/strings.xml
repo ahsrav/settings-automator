@@ -16,4 +16,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="enter_filter_name">Enter filter name</string>
+    <string name="select_trigger_type">Select Trigger Type</string>
+    <string name="arrow"><![CDATA[>]]></string>
 </resources>

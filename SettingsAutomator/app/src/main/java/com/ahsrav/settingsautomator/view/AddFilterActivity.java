@@ -25,9 +25,48 @@ public class AddFilterActivity extends FragmentActivity {
         ButterKnife.bind(this);
     }
 
+    public void setValue(int field, int value) {
+        switch (field) {
+            case R.id.triggerTypeInfoTV:
+                currentFilterInfo.triggerType = value;
+                break;
+            case R.id.bluetoothOnOffInfoTV:
+                currentFilterInfo.bluetoothOnOff = value;
+                break;
+            case R.id.gpsOnOffInfoTV:
+                currentFilterInfo.gpsOnOff = value;
+                break;
+            case R.id.wifiOnOffInfoTV:
+                currentFilterInfo.wifiOnOff = value;
+                break;
+            case R.id.deviceVolumeInfoTV:
+                currentFilterInfo.deviceVolume = value;
+                break;
+            case R.id.alarmVolumeInfoTV:
+                currentFilterInfo.alarmVolume = value;
+                break;
+            case R.id.mediaVolumeInfoTV:
+                currentFilterInfo.mediaVolume = value;
+                break;
+            case R.id.lockScreenModeInfoTV:
+                currentFilterInfo.lockScreenMode = value;
+                break;
+            case R.id.deviceBrightnessInfoTV:
+                currentFilterInfo.deviceBrightness = value;
+                break;
+        }
+    }
+
+    public void setValue(int field, String value) {
+        if (field == R.id.filterNameInfoTV) {
+            currentFilterInfo.filterName = value;
+        }
+    }
+
     @OnClick (R.id.filterName)
     public void enterFilterName() {
-        DialogFragment newFragment = new TextViewDialogFragment();
+        DialogFragment newFragment = TextViewDialogFragment.newInstance(R.string.enter_filter_name,
+                currentFilterInfo.filterName, R.id.filterNameInfoTV);
         newFragment.show(getSupportFragmentManager(), "filterName");
     }
 
@@ -94,7 +133,10 @@ public class AddFilterActivity extends FragmentActivity {
 
     @OnClick (R.id.lockScreenMode)
     public void selectLockScreenMode() {
-
+        DialogFragment newFragment = ListViewDialogFragment
+                .newInstance(R.string.lock_screen_mode, currentFilterInfo.lockScreenMode,
+                        R.id.lockScreenModeInfoTV, R.array.lockScreenMode);
+        newFragment.show(getSupportFragmentManager(), "wifi");
     }
 
     @OnClick (R.id.deviceBrightness)

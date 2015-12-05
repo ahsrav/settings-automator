@@ -13,12 +13,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ahsrav.settingsautomator.R;
+import com.ahsrav.settingsautomator.view.AddFilterActivity;
 
 import butterknife.ButterKnife;
 
 public class CustomViewDialogFragment extends DialogFragment {
     private static final String TAG = "CustomViewDialogFragment";
-    Activity activity;
+    AddFilterActivity activity;
     private int changedVal;
 
 
@@ -35,14 +36,14 @@ public class CustomViewDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        this.activity = getActivity();
+        this.activity = (AddFilterActivity) getActivity();
         int title = getArguments().getInt("title");
         final int viewToModify = getArguments().getInt("viewToModify");
         final int viewToInflate = getArguments().getInt("viewToInflate");
         int defaultValue = getArguments().getInt("defaultValue");
         setChangedVal(defaultValue);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = activity.getLayoutInflater();
         final View view = inflater.inflate(viewToInflate, null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -52,8 +53,9 @@ public class CustomViewDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                                ((TextView) getActivity().findViewById(viewToModify))
+                                ((TextView) activity.findViewById(viewToModify))
                                 .setText(String.valueOf(changedVal));
+                        activity.setValue(viewToModify, changedVal);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

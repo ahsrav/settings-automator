@@ -2,19 +2,18 @@ package com.ahsrav.settingsautomator.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.widget.TextView;
+
+import com.ahsrav.settingsautomator.view.AddFilterActivity;
 
 public class ListViewDialogFragment extends DialogFragment {
 
     private static final String TAG = "ListViewDialogFragment";
-    Activity activity;
+    AddFilterActivity activity;
 
     public static ListViewDialogFragment newInstance(int title, int defaultValue, int viewToModify, int itemsArray) {
         ListViewDialogFragment frag = new ListViewDialogFragment();
@@ -29,7 +28,7 @@ public class ListViewDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        this.activity = getActivity();
+        this.activity = (AddFilterActivity) getActivity();
         int title = getArguments().getInt("title");
         final int viewToModify = getArguments().getInt("viewToModify");
         final int itemsArray = getArguments().getInt("itemsArray");
@@ -43,6 +42,7 @@ public class ListViewDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         ((TextView) activity.findViewById(viewToModify))
                                 .setText(activity.getResources().getStringArray(itemsArray)[which]);
+                        activity.setValue(viewToModify, which);
                         dialog.dismiss();
                     }
                 });

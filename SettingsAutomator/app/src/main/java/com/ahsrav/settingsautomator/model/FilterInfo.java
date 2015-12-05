@@ -12,7 +12,7 @@ public class FilterInfo {
     public int deviceVolume;
     public int alarmVolume;
     public int mediaVolume;
-    public String lockScreenMode;
+    public int lockScreenMode;
     public int deviceBrightness;
 
     public FilterInfo() {
@@ -20,5 +20,6 @@ public class FilterInfo {
         bluetoothOnOff = -1;
         gpsOnOff = -1;
         wifiOnOff = -1;
+        lockScreenMode = -1;
     }
 }

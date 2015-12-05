@@ -16,22 +16,40 @@ import com.ahsrav.settingsautomator.view.AddFilterActivity;
 public class TextViewDialogFragment extends DialogFragment {
 
     private static final String TAG = "TextViewDialogFragment";
+    AddFilterActivity activity;
+
+    public static TextViewDialogFragment newInstance(int title, String defaultValue, int viewToModify) {
+        TextViewDialogFragment frag = new TextViewDialogFragment();
+        Bundle args = new Bundle();
+        args.putInt("title", title);
+        args.putInt("viewToModify", viewToModify);
+        args.putString("defaultValue", defaultValue);
+        frag.setArguments(args);
+        return frag;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_textview, null);
+        activity = (AddFilterActivity) getActivity();
+        int title = getArguments().getInt("title");
+        final int viewToModify = getArguments().getInt("viewToModify");
+        String defaultValue = getArguments().getString("defaultValue");
 
-        builder.setTitle(R.string.enter_filter_name)
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog_textview, null);
+        final EditText enterNameTV = (EditText) view.findViewById(R.id.enterNameTV);
+        enterNameTV.setText(defaultValue);
+
+        builder.setTitle(title)
                 .setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        EditText enterNameTV = (EditText) view.findViewById(R.id.enterNameTV);
-                        ((TextView) getActivity().findViewById(R.id.filterNameInfoTV))
+                        ((TextView) activity.findViewById(viewToModify))
                                 .setText(enterNameTV.getText().toString());
+                        activity.setValue(viewToModify, enterNameTV.getText().toString());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

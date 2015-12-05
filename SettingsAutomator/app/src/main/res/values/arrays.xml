@@ -10,5 +10,10 @@
         <item>Off</item>
         <item>Leave Unchanged</item>
     </string-array>
+    <string-array name="lockScreenMode">
+        <item>No PIN/password</item>
+        <item>Disable lock screen</item>
+        <item>Leave Unchanged</item>
+    </string-array>
 
 </resources>

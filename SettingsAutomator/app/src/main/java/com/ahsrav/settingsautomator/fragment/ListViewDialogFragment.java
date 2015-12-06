@@ -1,6 +1,5 @@
 package com.ahsrav.settingsautomator.fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,17 +9,19 @@ import android.widget.TextView;
 
 import com.ahsrav.settingsautomator.view.AddFilterActivity;
 
+import java.util.ArrayList;
+
 public class ListViewDialogFragment extends DialogFragment {
 
     private static final String TAG = "ListViewDialogFragment";
     AddFilterActivity activity;
 
-    public static ListViewDialogFragment newInstance(int title, int defaultValue, int viewToModify, int itemsArray) {
+    public static ListViewDialogFragment newInstance(int title, int defaultValue, int viewToModify, String[] itemsArray) {
         ListViewDialogFragment frag = new ListViewDialogFragment();
         Bundle args = new Bundle();
         args.putInt("title", title);
         args.putInt("viewToModify", viewToModify);
-        args.putInt("itemsArray", itemsArray);
+        args.putStringArray("itemsArray", itemsArray);
         args.putInt("defaultValue", defaultValue);
         frag.setArguments(args);
         return frag;
@@ -31,7 +32,7 @@ public class ListViewDialogFragment extends DialogFragment {
         this.activity = (AddFilterActivity) getActivity();
         int title = getArguments().getInt("title");
         final int viewToModify = getArguments().getInt("viewToModify");
-        final int itemsArray = getArguments().getInt("itemsArray");
+        final String[] itemsArray = getArguments().getStringArray("itemsArray");
         int defaultValue = getArguments().getInt("defaultValue");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -41,7 +42,7 @@ public class ListViewDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ((TextView) activity.findViewById(viewToModify))
-                                .setText(activity.getResources().getStringArray(itemsArray)[which]);
+                                .setText(itemsArray[which]);
                         activity.setValue(viewToModify, which);
                         dialog.dismiss();
                     }

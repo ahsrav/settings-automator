@@ -1,5 +1,12 @@
 package com.ahsrav.settingsautomator.view;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,12 +18,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ahsrav.settingsautomator.R;
+import com.ahsrav.settingsautomator.database.FilterDBHelper;
 import com.ahsrav.settingsautomator.fragment.CustomViewDialogFragment;
 import com.ahsrav.settingsautomator.fragment.ListViewDialogFragment;
 import com.ahsrav.settingsautomator.fragment.TextViewDialogFragment;
 import com.ahsrav.settingsautomator.model.FilterInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,7 +81,9 @@ public class AddFilterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                // SAVE info
+                FilterDBHelper dbHelper = new FilterDBHelper(this);
+                dbHelper.addFilterRow(currentFilterInfo);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -170,12 +184,49 @@ public class AddFilterActivity extends AppCompatActivity {
     public void selectTriggerType() {
         DialogFragment newFragment = ListViewDialogFragment
                 .newInstance(R.string.select_trigger_type, currentFilterInfo.triggerType,
-                        R.id.triggerTypeInfoTV, R.array.triggerTypes);
+                        R.id.triggerTypeInfoTV, getResources().getStringArray(R.array.triggerTypes));
         newFragment.show(getSupportFragmentManager(), "triggerType");
     }
 
     @OnClick (R.id.trigger)
     public void selectTrigger() {
+        ArrayList<String> triggersList = new ArrayList<>();
+        switch (currentFilterInfo.triggerType) {
+            case 0:
+                WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+                if (wifiManager.isWifiEnabled()){
+                    for (WifiConfiguration wifi : wifiManager.getConfiguredNetworks()) {
+                        triggersList.add(wifi.SSID);
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.please_turn_on_wifi, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case 1:
+                BluetoothAdapter bluetoothAdapter;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    bluetoothAdapter = ((BluetoothManager) getSystemService(BLUETOOTH_SERVICE)).getAdapter();
+                } else {
+                    bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                }
+                if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+                    for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
+                        triggersList.add(device.getName());
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.please_turn_on_bluetooth, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                Toast.makeText(getApplicationContext(), R.string.trigger_type_first, Toast.LENGTH_SHORT).show();
+                break;
+        }
+        if (triggersList.size() > 0) {
+            DialogFragment newFragment = ListViewDialogFragment
+                    .newInstance(R.string.select_trigger, -1,
+                            R.id.triggerInfoTV, triggersList.toArray(new String[triggersList.size()]));
+            newFragment.show(getSupportFragmentManager(), "triggerType");
+        }
 
     }
 
@@ -183,7 +234,7 @@ public class AddFilterActivity extends AppCompatActivity {
     public void setBluetoothOnOff() {
         DialogFragment newFragment = ListViewDialogFragment
                 .newInstance(R.string.bluetooth, currentFilterInfo.bluetoothOnOff,
-                        R.id.bluetoothOnOffInfoTV, R.array.onOffNoChange);
+                        R.id.bluetoothOnOffInfoTV, getResources().getStringArray(R.array.onOffNoChange));
         newFragment.show(getSupportFragmentManager(), "bluetooth");
     }
 
@@ -191,7 +242,7 @@ public class AddFilterActivity extends AppCompatActivity {
     public void setGPSOnOff() {
         DialogFragment newFragment = ListViewDialogFragment
                 .newInstance(R.string.gps, currentFilterInfo.gpsOnOff,
-                        R.id.gpsOnOffInfoTV, R.array.onOffNoChange);
+                        R.id.gpsOnOffInfoTV, getResources().getStringArray(R.array.onOffNoChange));
         newFragment.show(getSupportFragmentManager(), "gps");
     }
 
@@ -199,7 +250,7 @@ public class AddFilterActivity extends AppCompatActivity {
     public void setWifiOnOff() {
         DialogFragment newFragment = ListViewDialogFragment
                 .newInstance(R.string.wifi, currentFilterInfo.wifiOnOff,
-                        R.id.wifiOnOffInfoTV, R.array.onOffNoChange);
+                        R.id.wifiOnOffInfoTV, getResources().getStringArray(R.array.onOffNoChange));
         newFragment.show(getSupportFragmentManager(), "wifi");
     }
 
@@ -231,7 +282,7 @@ public class AddFilterActivity extends AppCompatActivity {
     public void selectLockScreenMode() {
         DialogFragment newFragment = ListViewDialogFragment
                 .newInstance(R.string.lock_screen_mode, currentFilterInfo.lockScreenMode,
-                        R.id.lockScreenModeInfoTV, R.array.lockScreenMode);
+                        R.id.lockScreenModeInfoTV, getResources().getStringArray(R.array.lockScreenMode));
         newFragment.show(getSupportFragmentManager(), "wifi");
     }
 

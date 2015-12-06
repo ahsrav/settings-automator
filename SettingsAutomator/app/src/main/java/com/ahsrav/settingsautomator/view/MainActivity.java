@@ -8,8 +8,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.ahsrav.settingsautomator.R;
+import com.ahsrav.settingsautomator.database.FilterDBHelper;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,13 +25,30 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.my_toolbar)
     Toolbar myToolbar;
 
+    @Bind(R.id.filtersLV)
+    ListView filtersLV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(myToolbar);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateListView();
+    }
+
+    private void populateListView() {
+        FilterDBHelper dbHelper = new FilterDBHelper(this);
+        List<String> listOfNames = dbHelper.getAllFilterNames();
+        if (listOfNames.size() > 0) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listOfNames);
+            filtersLV.setAdapter(adapter);
+        }
     }
 
     @Override

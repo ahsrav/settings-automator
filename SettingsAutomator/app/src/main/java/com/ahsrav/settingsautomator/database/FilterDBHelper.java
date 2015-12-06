@@ -1,8 +1,15 @@
 package com.ahsrav.settingsautomator.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.ahsrav.settingsautomator.model.FilterInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilterDBHelper extends SQLiteOpenHelper {
 
@@ -25,8 +32,8 @@ public class FilterDBHelper extends SQLiteOpenHelper {
                     FilterContract.COLUMN_ALARM_VOLUME + INTEGER_TYPE + COMMA_SEP +
                     FilterContract.COLUMN_MEDIA_VOLUME + INTEGER_TYPE + COMMA_SEP +
                     FilterContract.COLUMN_LOCK_SCREEN_MODE + INTEGER_TYPE + COMMA_SEP +
-                    FilterContract.COLUMN_DEVICE_BRIGHTNESS + INTEGER_TYPE + COMMA_SEP +
-            " )";
+                    FilterContract.COLUMN_DEVICE_BRIGHTNESS + INTEGER_TYPE +
+                    " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FilterContract.TABLE_NAME;
@@ -43,5 +50,42 @@ public class FilterDBHelper extends SQLiteOpenHelper {
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public long addFilterRow(FilterInfo data) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(FilterContract.COLUMN_FILTER_NAME, data.filterName);
+        values.put(FilterContract.COLUMN_TRIGGER_TYPE, data.triggerType);
+        values.put(FilterContract.COLUMN_TRIGGER, data.trigger);
+        values.put(FilterContract.COLUMN_BLUETOOTH, data.bluetoothOnOff);
+        values.put(FilterContract.COLUMN_GPS, data.gpsOnOff);
+        values.put(FilterContract.COLUMN_WIFI, data.wifiOnOff);
+        values.put(FilterContract.COLUMN_DEVICE_VOLUME, data.deviceVolume);
+        values.put(FilterContract.COLUMN_ALARM_VOLUME, data.alarmVolume);
+        values.put(FilterContract.COLUMN_MEDIA_VOLUME, data.mediaVolume);
+        values.put(FilterContract.COLUMN_LOCK_SCREEN_MODE, data.lockScreenMode);
+        values.put(FilterContract.COLUMN_DEVICE_BRIGHTNESS, data.deviceBrightness);
+
+        return db.insert(FilterContract.TABLE_NAME, null, values);
+    }
+
+    public List<String> getAllFilterNames() {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {FilterContract.COLUMN_FILTER_NAME};
+
+        List<String> listOfNames = new ArrayList<>();
+
+        Cursor cursor = db.query(FilterContract.TABLE_NAME, projection, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_FILTER_NAME));
+                listOfNames.add(name);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return listOfNames;
     }
 }

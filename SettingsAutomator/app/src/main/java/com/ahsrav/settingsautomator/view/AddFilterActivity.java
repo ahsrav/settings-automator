@@ -3,6 +3,14 @@ package com.ahsrav.settingsautomator.view;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.ahsrav.settingsautomator.R;
 import com.ahsrav.settingsautomator.fragment.CustomViewDialogFragment;
@@ -10,19 +18,107 @@ import com.ahsrav.settingsautomator.fragment.ListViewDialogFragment;
 import com.ahsrav.settingsautomator.fragment.TextViewDialogFragment;
 import com.ahsrav.settingsautomator.model.FilterInfo;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddFilterActivity extends FragmentActivity {
+public class AddFilterActivity extends AppCompatActivity {
 
+    private static final String TAG = "AddFilterActivity";
     public FilterInfo currentFilterInfo;
+
+    @Bind(R.id.filterNameInfoTV) TextView filterNameInfoTV;
+    @Bind(R.id.triggerTypeInfoTV) TextView triggerTypeInfoTV;
+    @Bind(R.id.triggerInfoTV) TextView triggerInfoTV;
+    @Bind(R.id.bluetoothOnOffInfoTV) TextView bluetoothOnOffInfoTV;
+    @Bind(R.id.gpsOnOffInfoTV) TextView gpsOnOffInfoTV;
+    @Bind(R.id.wifiOnOffInfoTV) TextView wifiOnOffInfoTV;
+    @Bind(R.id.deviceVolumeInfoTV) TextView deviceVolumeInfoTV;
+    @Bind(R.id.alarmVolumeInfoTV) TextView alarmVolumeInfoTV;
+    @Bind(R.id.mediaVolumeInfoTV) TextView mediaVolumeInfoTV;
+    @Bind(R.id.lockScreenModeInfoTV) TextView lockScreenModeInfoTV;
+    @Bind(R.id.deviceBrightnessInfoTV) TextView deviceBrightnessInfoTV;
+
+
+    @Bind(R.id.my_toolbar)
+    Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_filter);
-        currentFilterInfo = new FilterInfo();
         ButterKnife.bind(this);
+        setSupportActionBar(myToolbar);
+        currentFilterInfo = new FilterInfo();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.add_filter);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_filter_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                // SAVE info
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setData() {
+        Log.i(TAG, "setDAta");
+        filterNameInfoTV.setText(currentFilterInfo.filterName);
+        triggerTypeInfoTV.setText(getDisplayString(currentFilterInfo.triggerType, R.array.triggerTypes));
+        triggerInfoTV.setText(currentFilterInfo.trigger);
+        bluetoothOnOffInfoTV.setText(getDisplayString(currentFilterInfo.bluetoothOnOff, R.array.onOffNoChange));
+        gpsOnOffInfoTV.setText(getDisplayString(currentFilterInfo.gpsOnOff, R.array.onOffNoChange));
+        wifiOnOffInfoTV.setText(getDisplayString(currentFilterInfo.wifiOnOff, R.array.onOffNoChange));
+        deviceVolumeInfoTV.setText(getDisplayString(currentFilterInfo.deviceVolume));
+        alarmVolumeInfoTV.setText(getDisplayString(currentFilterInfo.alarmVolume));
+        mediaVolumeInfoTV.setText(getDisplayString(currentFilterInfo.mediaVolume));
+        lockScreenModeInfoTV.setText(getDisplayString(currentFilterInfo.lockScreenMode, R.array.onOffNoChange));
+        deviceBrightnessInfoTV.setText(getDisplayString(currentFilterInfo.deviceBrightness));
+    }
+
+    private String getDisplayString(int value, int array) {
+        String[] stringArray = getResources().getStringArray(array);
+        if (value > -1 && value < stringArray.length) {
+            return stringArray[value];
+        }
+        return getString(R.string.arrow);
+    }
+
+    private String getDisplayString(int value) {
+        if (value == 0) {
+            return getString(R.string.arrow);
+        }
+        return String.valueOf(value);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i(TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("currentFilterInfo", currentFilterInfo);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i(TAG, "onRestoreInstanceState");
+        super.onRestoreInstanceState(savedInstanceState);
+        currentFilterInfo = savedInstanceState.getParcelable("currentFilterInfo");
+        setData();
     }
 
     public void setValue(int field, int value) {

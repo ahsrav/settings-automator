@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.ahsrav.settingsautomator.view.AddFilterActivity;
 
-import java.util.ArrayList;
-
 public class ListViewDialogFragment extends DialogFragment {
 
     private static final String TAG = "ListViewDialogFragment";
@@ -41,10 +39,14 @@ public class ListViewDialogFragment extends DialogFragment {
                 .setSingleChoiceItems(itemsArray, defaultValue, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((TextView) activity.findViewById(viewToModify))
-                                .setText(itemsArray[which]);
-                        activity.setValue(viewToModify, which);
-                        dialog.dismiss();
+                        if (itemsArray != null && itemsArray.length > which) {
+                            ((TextView) activity.findViewById(viewToModify))
+                                    .setText(itemsArray[which]);
+                            activity.setValue(viewToModify, which);
+                            dialog.dismiss();
+                        } else {
+                            throw new RuntimeException("Unexpected error in ListViewDialogFragment");
+                        }
                     }
                 });
 

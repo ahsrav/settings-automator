@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.ListView;
 
 import com.ahsrav.settingsautomator.model.FilterInfo;
 
@@ -37,6 +39,7 @@ public class FilterDBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FilterContract.TABLE_NAME;
+    private static final String TAG = "FilterDBHelper";
 
     public FilterDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -54,21 +57,7 @@ public class FilterDBHelper extends SQLiteOpenHelper {
 
     public long addFilterRow(FilterInfo data) {
         SQLiteDatabase db = getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(FilterContract.COLUMN_FILTER_NAME, data.filterName);
-        values.put(FilterContract.COLUMN_TRIGGER_TYPE, data.triggerType);
-        values.put(FilterContract.COLUMN_TRIGGER, data.trigger);
-        values.put(FilterContract.COLUMN_BLUETOOTH, data.bluetoothOnOff);
-        values.put(FilterContract.COLUMN_GPS, data.gpsOnOff);
-        values.put(FilterContract.COLUMN_WIFI, data.wifiOnOff);
-        values.put(FilterContract.COLUMN_DEVICE_VOLUME, data.deviceVolume);
-        values.put(FilterContract.COLUMN_ALARM_VOLUME, data.alarmVolume);
-        values.put(FilterContract.COLUMN_MEDIA_VOLUME, data.mediaVolume);
-        values.put(FilterContract.COLUMN_LOCK_SCREEN_MODE, data.lockScreenMode);
-        values.put(FilterContract.COLUMN_DEVICE_BRIGHTNESS, data.deviceBrightness);
-
-        return db.insert(FilterContract.TABLE_NAME, null, values);
+        return db.insert(FilterContract.TABLE_NAME, null, getContentValues(data));
     }
 
     public List<String> getAllFilterNames() {
@@ -87,5 +76,69 @@ public class FilterDBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return listOfNames;
+    }
+
+    public FilterInfo getFilterByName(String filterName) {
+        List<FilterInfo> filterInfoList = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(FilterContract.TABLE_NAME, null, FilterContract.COLUMN_FILTER_NAME+"=?",
+                new String[]{filterName}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                FilterInfo filterInfo = new FilterInfo();
+                filterInfo.primaryKey = cursor.getInt(cursor.getColumnIndex(FilterContract._ID));
+                filterInfo.filterName = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_FILTER_NAME));
+                filterInfo.triggerType = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_TRIGGER_TYPE));
+                filterInfo.trigger = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_TRIGGER));
+                filterInfo.bluetoothOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_BLUETOOTH));
+                filterInfo.gpsOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_GPS));
+                filterInfo.wifiOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_WIFI));
+                filterInfo.deviceVolume = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_DEVICE_VOLUME));
+                filterInfo.alarmVolume = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_ALARM_VOLUME));
+                filterInfo.mediaVolume = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_MEDIA_VOLUME));
+                filterInfo.lockScreenMode = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_LOCK_SCREEN_MODE));
+                filterInfo.deviceBrightness = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_DEVICE_BRIGHTNESS));
+
+                filterInfoList.add(filterInfo);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+        if (filterInfoList.size() == 1) {
+            return filterInfoList.get(0);
+        }
+        return null;
+    }
+
+    public int updateFilterRow(FilterInfo data) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.update(FilterContract.TABLE_NAME, getContentValues(data), FilterContract._ID+"=?",
+                new String[]{String.valueOf(data.primaryKey)});
+    }
+
+    public int deleteFilterRow(int primaryKey) {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.delete(FilterContract.TABLE_NAME, FilterContract._ID+"=?",
+                new String[]{String.valueOf(primaryKey)});
+    }
+
+    private ContentValues getContentValues(FilterInfo data) {
+        ContentValues values = new ContentValues();
+        values.put(FilterContract.COLUMN_FILTER_NAME, data.filterName);
+        values.put(FilterContract.COLUMN_TRIGGER_TYPE, data.triggerType);
+        values.put(FilterContract.COLUMN_TRIGGER, data.trigger);
+        values.put(FilterContract.COLUMN_BLUETOOTH, data.bluetoothOnOff);
+        values.put(FilterContract.COLUMN_GPS, data.gpsOnOff);
+        values.put(FilterContract.COLUMN_WIFI, data.wifiOnOff);
+        values.put(FilterContract.COLUMN_DEVICE_VOLUME, data.deviceVolume);
+        values.put(FilterContract.COLUMN_ALARM_VOLUME, data.alarmVolume);
+        values.put(FilterContract.COLUMN_MEDIA_VOLUME, data.mediaVolume);
+        values.put(FilterContract.COLUMN_LOCK_SCREEN_MODE, data.lockScreenMode);
+        values.put(FilterContract.COLUMN_DEVICE_BRIGHTNESS, data.deviceBrightness);
+        return values;
     }
 }

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 // This class contains all the information entered by the user when a ew filter is created.
 public class FilterInfo implements Parcelable {
 
+    public int primaryKey;
     public String filterName;
     public int triggerType;
     public String trigger;

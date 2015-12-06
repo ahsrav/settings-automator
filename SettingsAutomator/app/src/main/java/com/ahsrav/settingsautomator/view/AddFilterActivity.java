@@ -55,17 +55,37 @@ public class AddFilterActivity extends AppCompatActivity {
     @Bind(R.id.my_toolbar)
     Toolbar myToolbar;
 
+    private ArrayList<String> triggersList;
+    private boolean editMode;
+    private FilterDBHelper dbHelper = new FilterDBHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_filter);
         ButterKnife.bind(this);
+
         setSupportActionBar(myToolbar);
         currentFilterInfo = new FilterInfo();
+
+        String editFilter = getIntent().getStringExtra("FilterName");
+        if (editFilter != null && editFilter.length() > 0) {
+            editMode = true;
+        }
+
+        if (editMode) {
+            currentFilterInfo = dbHelper.getFilterByName(editFilter);
+            setData();
+        }
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(R.string.add_filter);
+            if (editMode) {
+                actionBar.setTitle(R.string.edit_filter);
+            } else {
+                actionBar.setTitle(R.string.add_filter);
+            }
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
@@ -81,8 +101,17 @@ public class AddFilterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                FilterDBHelper dbHelper = new FilterDBHelper(this);
-                dbHelper.addFilterRow(currentFilterInfo);
+                if (editMode) {
+                    dbHelper.updateFilterRow(currentFilterInfo);
+                } else {
+                    dbHelper.addFilterRow(currentFilterInfo);
+                }
+                finish();
+                return true;
+            case R.id.action_trash:
+                if (editMode) {
+                    dbHelper.deleteFilterRow(currentFilterInfo.primaryKey);
+                }
                 finish();
                 return true;
             default:
@@ -140,6 +169,11 @@ public class AddFilterActivity extends AppCompatActivity {
             case R.id.triggerTypeInfoTV:
                 currentFilterInfo.triggerType = value;
                 break;
+            case R.id.triggerInfoTV:
+                if (triggersList.size() > value) {
+                    currentFilterInfo.trigger = triggersList.get(value);
+                }
+                break;
             case R.id.bluetoothOnOffInfoTV:
                 currentFilterInfo.bluetoothOnOff = value;
                 break;
@@ -190,7 +224,7 @@ public class AddFilterActivity extends AppCompatActivity {
 
     @OnClick (R.id.trigger)
     public void selectTrigger() {
-        ArrayList<String> triggersList = new ArrayList<>();
+        triggersList = new ArrayList<>();
         switch (currentFilterInfo.triggerType) {
             case 0:
                 WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);

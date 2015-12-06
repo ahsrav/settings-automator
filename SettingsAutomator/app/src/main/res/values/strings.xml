@@ -24,4 +24,5 @@
     <string name="trigger_type_first">Please select trigger type first</string>
     <string name="please_turn_on_wifi">Please turn on Wifi to configure this trigger.</string>
     <string name="please_turn_on_bluetooth">Please turn on Bluetooth to configure this trigger.</string>
+    <string name="edit_filter">Edit Filter</string>
 </resources>

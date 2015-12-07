@@ -79,12 +79,47 @@ public class FilterDBHelper extends SQLiteOpenHelper {
     }
 
     public FilterInfo getFilterByName(String filterName) {
-        List<FilterInfo> filterInfoList = new ArrayList<>();
+        List<FilterInfo> filterInfoList;
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(FilterContract.TABLE_NAME, null, FilterContract.COLUMN_FILTER_NAME+"=?",
                 new String[]{filterName}, null, null, null);
+        filterInfoList = getListOfFilters(cursor);
+        if (filterInfoList.size() == 1) {
+            return filterInfoList.get(0);
+        }
+        return null;
+    }
 
+    public int updateFilterRow(FilterInfo data) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.update(FilterContract.TABLE_NAME, getContentValues(data), FilterContract._ID+"=?",
+                new String[]{String.valueOf(data.primaryKey)});
+    }
+
+    public int deleteFilterRow(int primaryKey) {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.delete(FilterContract.TABLE_NAME, FilterContract._ID + "=?",
+                new String[]{String.valueOf(primaryKey)});
+    }
+
+    public FilterInfo getWifiRow(String ssid) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        List<FilterInfo> filters;
+        String selection = FilterContract.COLUMN_TRIGGER_TYPE + "=0 AND " + FilterContract.COLUMN_TRIGGER + "=?";
+
+        Cursor cursor = db.query(FilterContract.TABLE_NAME, null, selection, new String[]{ssid}, null, null, null);
+        filters = getListOfFilters(cursor);
+        if (filters.size() == 1) {
+            return filters.get(0);
+        }
+        return null;
+    }
+
+    private List<FilterInfo> getListOfFilters(Cursor cursor) {
+        List<FilterInfo> filterInfoList = new ArrayList<>();
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 FilterInfo filterInfo = new FilterInfo();
@@ -106,24 +141,7 @@ public class FilterDBHelper extends SQLiteOpenHelper {
             }
         }
         cursor.close();
-
-        if (filterInfoList.size() == 1) {
-            return filterInfoList.get(0);
-        }
-        return null;
-    }
-
-    public int updateFilterRow(FilterInfo data) {
-        SQLiteDatabase db = getReadableDatabase();
-
-        return db.update(FilterContract.TABLE_NAME, getContentValues(data), FilterContract._ID+"=?",
-                new String[]{String.valueOf(data.primaryKey)});
-    }
-
-    public int deleteFilterRow(int primaryKey) {
-        SQLiteDatabase db = getReadableDatabase();
-        return db.delete(FilterContract.TABLE_NAME, FilterContract._ID+"=?",
-                new String[]{String.valueOf(primaryKey)});
+        return filterInfoList;
     }
 
     private ContentValues getContentValues(FilterInfo data) {

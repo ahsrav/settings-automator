@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ahsrav.settingsautomator.R;
-import com.ahsrav.settingsautomator.view.AddFilterActivity;
+import com.ahsrav.settingsautomator.activity.AddFilterActivity;
 
 public class TextViewDialogFragment extends DialogFragment {
 

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.ListView;
 
 import com.ahsrav.settingsautomator.model.FilterInfo;
 
@@ -104,13 +102,14 @@ public class FilterDBHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(primaryKey)});
     }
 
-    public FilterInfo getWifiRow(String ssid) {
+    public FilterInfo getRowByConnection(String triggerID, int triggerType) {
         SQLiteDatabase db = getReadableDatabase();
 
         List<FilterInfo> filters;
-        String selection = FilterContract.COLUMN_TRIGGER_TYPE + "=0 AND " + FilterContract.COLUMN_TRIGGER + "=?";
+        String selection = FilterContract.COLUMN_TRIGGER_TYPE + "=? AND " + FilterContract.COLUMN_TRIGGER_ID + "=?";
 
-        Cursor cursor = db.query(FilterContract.TABLE_NAME, null, selection, new String[]{ssid}, null, null, null);
+        Cursor cursor = db.query(FilterContract.TABLE_NAME, null, selection,
+                new String[]{String.valueOf(triggerType), triggerID}, null, null, null);
         filters = getListOfFilters(cursor);
         if (filters.size() == 1) {
             return filters.get(0);
@@ -127,6 +126,7 @@ public class FilterDBHelper extends SQLiteOpenHelper {
                 filterInfo.filterName = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_FILTER_NAME));
                 filterInfo.triggerType = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_TRIGGER_TYPE));
                 filterInfo.trigger = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_TRIGGER));
+                filterInfo.triggerID = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_TRIGGER_ID));
                 filterInfo.bluetoothOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_BLUETOOTH));
                 filterInfo.gpsOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_GPS));
                 filterInfo.wifiOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_WIFI));
@@ -149,6 +149,7 @@ public class FilterDBHelper extends SQLiteOpenHelper {
         values.put(FilterContract.COLUMN_FILTER_NAME, data.filterName);
         values.put(FilterContract.COLUMN_TRIGGER_TYPE, data.triggerType);
         values.put(FilterContract.COLUMN_TRIGGER, data.trigger);
+        values.put(FilterContract.COLUMN_TRIGGER_ID, data.triggerID);
         values.put(FilterContract.COLUMN_BLUETOOTH, data.bluetoothOnOff);
         values.put(FilterContract.COLUMN_GPS, data.gpsOnOff);
         values.put(FilterContract.COLUMN_WIFI, data.wifiOnOff);

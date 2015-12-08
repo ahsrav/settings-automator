@@ -1,4 +1,4 @@
-package com.ahsrav.settingsautomator.view;
+package com.ahsrav.settingsautomator.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +22,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 

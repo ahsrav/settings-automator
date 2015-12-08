@@ -1,21 +1,17 @@
 package com.ahsrav.settingsautomator.fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ahsrav.settingsautomator.R;
-import com.ahsrav.settingsautomator.view.AddFilterActivity;
-
-import butterknife.ButterKnife;
+import com.ahsrav.settingsautomator.activity.AddFilterActivity;
 
 public class CustomViewDialogFragment extends DialogFragment {
     private static final String TAG = "CustomViewDialogFragment";

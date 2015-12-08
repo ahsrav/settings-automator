@@ -1,4 +1,4 @@
-package com.ahsrav.settingsautomator.view;
+package com.ahsrav.settingsautomator.activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,7 +9,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +27,6 @@ import com.ahsrav.settingsautomator.fragment.TextViewDialogFragment;
 import com.ahsrav.settingsautomator.model.FilterInfo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,6 +54,7 @@ public class AddFilterActivity extends AppCompatActivity {
     Toolbar myToolbar;
 
     private ArrayList<String> triggersList;
+    private ArrayList<String> triggersIDList;
     private boolean editMode;
     private FilterDBHelper dbHelper = new FilterDBHelper(this);
 
@@ -172,6 +171,7 @@ public class AddFilterActivity extends AppCompatActivity {
             case R.id.triggerInfoTV:
                 if (triggersList.size() > value) {
                     currentFilterInfo.trigger = triggersList.get(value);
+                    currentFilterInfo.triggerID = triggersIDList.get(value);
                 }
                 break;
             case R.id.bluetoothOnOffInfoTV:
@@ -225,18 +225,20 @@ public class AddFilterActivity extends AppCompatActivity {
     @OnClick (R.id.trigger)
     public void selectTrigger() {
         triggersList = new ArrayList<>();
+        triggersIDList = new ArrayList<>();
         switch (currentFilterInfo.triggerType) {
-            case 0:
+            case FilterInfo.TRIGGER_TYPE_WIFI:
                 WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
                 if (wifiManager.isWifiEnabled()){
                     for (WifiConfiguration wifi : wifiManager.getConfiguredNetworks()) {
                         triggersList.add(wifi.SSID);
+                        triggersIDList.add(wifi.SSID);
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.please_turn_on_wifi, Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case 1:
+            case FilterInfo.TRIGGER_TYPE_BLUETOOTH:
                 BluetoothAdapter bluetoothAdapter;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     bluetoothAdapter = ((BluetoothManager) getSystemService(BLUETOOTH_SERVICE)).getAdapter();
@@ -246,6 +248,7 @@ public class AddFilterActivity extends AppCompatActivity {
                 if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
                     for (BluetoothDevice device : bluetoothAdapter.getBondedDevices()) {
                         triggersList.add(device.getName());
+                        triggersIDList.add(device.getAddress());
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.please_turn_on_bluetooth, Toast.LENGTH_SHORT).show();

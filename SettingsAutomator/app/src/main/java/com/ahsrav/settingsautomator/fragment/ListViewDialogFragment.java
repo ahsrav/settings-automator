@@ -7,7 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.widget.TextView;
 
-import com.ahsrav.settingsautomator.view.AddFilterActivity;
+import com.ahsrav.settingsautomator.activity.AddFilterActivity;
 
 public class ListViewDialogFragment extends DialogFragment {
 

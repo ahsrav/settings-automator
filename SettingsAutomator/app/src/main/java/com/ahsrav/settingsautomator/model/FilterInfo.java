@@ -6,10 +6,14 @@ import android.os.Parcelable;
 // This class contains all the information entered by the user when a ew filter is created.
 public class FilterInfo implements Parcelable {
 
+    public static final int TRIGGER_TYPE_WIFI = 0;
+    public static final int TRIGGER_TYPE_BLUETOOTH = 1;
+
     public int primaryKey;
     public String filterName;
     public int triggerType;
     public String trigger;
+    public String triggerID;
     public int bluetoothOnOff;
     public int gpsOnOff;
     public int wifiOnOff;
@@ -32,6 +36,7 @@ public class FilterInfo implements Parcelable {
         filterName = in.readString();
         triggerType = in.readInt();
         trigger = in.readString();
+        triggerID = in.readString();
         bluetoothOnOff = in.readInt();
         gpsOnOff = in.readInt();
         wifiOnOff = in.readInt();
@@ -64,6 +69,7 @@ public class FilterInfo implements Parcelable {
         dest.writeString(filterName);
         dest.writeInt(triggerType);
         dest.writeString(trigger);
+        dest.writeString(triggerID);
         dest.writeInt(bluetoothOnOff);
         dest.writeInt(gpsOnOff);
         dest.writeInt(wifiOnOff);

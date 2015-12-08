@@ -11,20 +11,31 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar" >
-        <activity android:name=".view.MainActivity" >
+        <activity android:name=".activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.AddFilterActivity"
-            android:parentActivityName=".view.MainActivity">
+        <activity android:name=".activity.AddFilterActivity"
+            android:parentActivityName=".activity.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.MainActivity" />
+                android:value=".activity.MainActivity" />
         </activity>
+        <receiver android:name=".receiver.WifiBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                <action android:name="android.net.wifi.STATE_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.BluetoothBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

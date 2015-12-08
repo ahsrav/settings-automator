@@ -10,6 +10,7 @@ public final class FilterContract implements BaseColumns {
     public static final String COLUMN_FILTER_NAME = "filterName";
     public static final String COLUMN_TRIGGER_TYPE = "triggerType";
     public static final String COLUMN_TRIGGER = "trigger";
+    public static final String COLUMN_TRIGGER_ID = "triggerID";
     public static final String COLUMN_BLUETOOTH = "bluetooth";
     public static final String COLUMN_GPS = "gps";
     public static final String COLUMN_WIFI = "wifi";

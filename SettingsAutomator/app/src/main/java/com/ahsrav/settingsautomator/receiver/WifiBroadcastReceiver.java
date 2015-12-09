@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.ahsrav.settingsautomator.database.FilterDBHelper;
 import com.ahsrav.settingsautomator.model.FilterInfo;
+import com.ahsrav.settingsautomator.util.ImplementSettingsUtil;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
@@ -27,7 +28,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             FilterDBHelper dbHelper = new FilterDBHelper(context);
             FilterInfo filter = dbHelper.getRowByConnection(wifiInfo.getSSID(), FilterInfo.TRIGGER_TYPE_WIFI);
             if (filter != null) {
-                // Implement settings
+                ImplementSettingsUtil.implementSettings(filter, context);
             }
         }
     }

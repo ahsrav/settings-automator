@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.media.AudioManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -124,7 +125,6 @@ public class AddFilterActivity extends AppCompatActivity {
         triggerTypeInfoTV.setText(getDisplayString(currentFilterInfo.triggerType, R.array.triggerTypes));
         triggerInfoTV.setText(currentFilterInfo.trigger);
         bluetoothOnOffInfoTV.setText(getDisplayString(currentFilterInfo.bluetoothOnOff, R.array.onOffNoChange));
-        gpsOnOffInfoTV.setText(getDisplayString(currentFilterInfo.gpsOnOff, R.array.onOffNoChange));
         wifiOnOffInfoTV.setText(getDisplayString(currentFilterInfo.wifiOnOff, R.array.onOffNoChange));
         deviceVolumeInfoTV.setText(getDisplayString(currentFilterInfo.deviceVolume));
         alarmVolumeInfoTV.setText(getDisplayString(currentFilterInfo.alarmVolume));
@@ -176,9 +176,6 @@ public class AddFilterActivity extends AppCompatActivity {
                 break;
             case R.id.bluetoothOnOffInfoTV:
                 currentFilterInfo.bluetoothOnOff = value;
-                break;
-            case R.id.gpsOnOffInfoTV:
-                currentFilterInfo.gpsOnOff = value;
                 break;
             case R.id.wifiOnOffInfoTV:
                 currentFilterInfo.wifiOnOff = value;
@@ -275,14 +272,6 @@ public class AddFilterActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "bluetooth");
     }
 
-    @OnClick (R.id.gpsOnOff)
-    public void setGPSOnOff() {
-        DialogFragment newFragment = ListViewDialogFragment
-                .newInstance(R.string.gps, currentFilterInfo.gpsOnOff,
-                        R.id.gpsOnOffInfoTV, getResources().getStringArray(R.array.onOffNoChange));
-        newFragment.show(getSupportFragmentManager(), "gps");
-    }
-
     @OnClick (R.id.wifiOnOff)
     public void setWifiOnOff() {
         DialogFragment newFragment = ListViewDialogFragment
@@ -293,24 +282,30 @@ public class AddFilterActivity extends AppCompatActivity {
 
     @OnClick (R.id.deviceVolume)
     public void setDeviceVolume() {
+        AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int defaultSystemVolume = manager.getStreamVolume(AudioManager.STREAM_SYSTEM);
         DialogFragment newFragment = CustomViewDialogFragment
-                .newInstance(R.string.device_volume, currentFilterInfo.deviceVolume,
+                .newInstance(R.string.device_volume, defaultSystemVolume,
                         R.id.deviceVolumeInfoTV, R.layout.dialog_seekbar);
         newFragment.show(getSupportFragmentManager(), "deviceVolume");
     }
 
     @OnClick (R.id.alarmVolume)
     public void setAlarmVolume() {
+        AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int defaultAlarmVolume = manager.getStreamVolume(AudioManager.STREAM_ALARM);
         DialogFragment newFragment = CustomViewDialogFragment
-                .newInstance(R.string.alarm_volume, currentFilterInfo.alarmVolume,
+                .newInstance(R.string.alarm_volume, defaultAlarmVolume,
                         R.id.alarmVolumeInfoTV, R.layout.dialog_seekbar);
         newFragment.show(getSupportFragmentManager(), "alarmVolume");
     }
 
     @OnClick (R.id.mediaVolume)
     public void setMediaVolume() {
+        AudioManager manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int defaultMediaVolume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
         DialogFragment newFragment = CustomViewDialogFragment
-                .newInstance(R.string.media_volume, currentFilterInfo.mediaVolume,
+                .newInstance(R.string.media_volume, defaultMediaVolume,
                         R.id.mediaVolumeInfoTV, R.layout.dialog_seekbar);
         newFragment.show(getSupportFragmentManager(), "mediaVolume");
     }

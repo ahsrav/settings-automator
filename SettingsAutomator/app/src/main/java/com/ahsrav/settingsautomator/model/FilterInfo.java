@@ -15,7 +15,6 @@ public class FilterInfo implements Parcelable {
     public String trigger;
     public String triggerID;
     public int bluetoothOnOff;
-    public int gpsOnOff;
     public int wifiOnOff;
     public int deviceVolume;
     public int alarmVolume;
@@ -27,8 +26,10 @@ public class FilterInfo implements Parcelable {
         triggerType = -1;
         trigger = ">";
         bluetoothOnOff = -1;
-        gpsOnOff = -1;
         wifiOnOff = -1;
+        deviceVolume = -1;
+        alarmVolume = -1;
+        mediaVolume = -1;
         lockScreenMode = -1;
     }
 
@@ -38,7 +39,6 @@ public class FilterInfo implements Parcelable {
         trigger = in.readString();
         triggerID = in.readString();
         bluetoothOnOff = in.readInt();
-        gpsOnOff = in.readInt();
         wifiOnOff = in.readInt();
         deviceVolume = in.readInt();
         alarmVolume = in.readInt();
@@ -71,7 +71,6 @@ public class FilterInfo implements Parcelable {
         dest.writeString(trigger);
         dest.writeString(triggerID);
         dest.writeInt(bluetoothOnOff);
-        dest.writeInt(gpsOnOff);
         dest.writeInt(wifiOnOff);
         dest.writeInt(deviceVolume);
         dest.writeInt(alarmVolume);

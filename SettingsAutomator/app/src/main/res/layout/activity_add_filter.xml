@@ -179,45 +179,6 @@
                 android:layout_height="1dp"
                 android:background="@android:color/holo_blue_dark"/>
 
-            <!--GPS-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/gpsOnOff"
-                android:paddingTop="@dimen/add_filter_row_padding_top_bottom"
-                android:paddingBottom="@dimen/add_filter_row_padding_top_bottom">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/gps"
-                    android:id="@+id/gpsOnOffTV"
-                    android:paddingTop="@dimen/add_filter_big_tv_margin_top_bottom"
-                    android:paddingBottom="@dimen/add_filter_big_tv_margin_top_bottom"
-                    android:layout_marginLeft="@dimen/add_filter_big_tv_margin_left"
-                    android:layout_marginStart="@dimen/add_filter_big_tv_margin_left"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/arrow"
-                    android:id="@+id/gpsOnOffInfoTV"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="@dimen/add_filter_small_tv_margin_right"
-                    android:layout_marginEnd="@dimen/add_filter_small_tv_margin_right"
-                    android:paddingTop="7dp"
-                    android:layout_gravity="bottom"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/holo_blue_dark"/>
-
             <!--Wifi-->
             <RelativeLayout
                 android:layout_width="match_parent"

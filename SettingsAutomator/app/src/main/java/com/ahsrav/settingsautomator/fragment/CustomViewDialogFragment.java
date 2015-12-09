@@ -37,7 +37,7 @@ public class CustomViewDialogFragment extends DialogFragment {
         final int viewToModify = getArguments().getInt("viewToModify");
         final int viewToInflate = getArguments().getInt("viewToInflate");
         int defaultValue = getArguments().getInt("defaultValue");
-        setChangedVal(defaultValue);
+        setChangedVal(-1);
 
         LayoutInflater inflater = activity.getLayoutInflater();
         final View view = inflater.inflate(viewToInflate, null);
@@ -49,9 +49,11 @@ public class CustomViewDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                                ((TextView) activity.findViewById(viewToModify))
-                                .setText(String.valueOf(changedVal));
-                        activity.setValue(viewToModify, changedVal);
+                        if (changedVal != -1) {
+                            ((TextView) activity.findViewById(viewToModify))
+                                    .setText(String.valueOf(changedVal));
+                            activity.setValue(viewToModify, changedVal);
+                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

@@ -26,7 +26,6 @@ public class FilterDBHelper extends SQLiteOpenHelper {
                     FilterContract.COLUMN_TRIGGER_TYPE + INTEGER_TYPE + COMMA_SEP +
                     FilterContract.COLUMN_TRIGGER + TEXT_TYPE + COMMA_SEP +
                     FilterContract.COLUMN_BLUETOOTH + INTEGER_TYPE + COMMA_SEP +
-                    FilterContract.COLUMN_GPS + INTEGER_TYPE + COMMA_SEP +
                     FilterContract.COLUMN_WIFI + INTEGER_TYPE + COMMA_SEP +
                     FilterContract.COLUMN_DEVICE_VOLUME + INTEGER_TYPE + COMMA_SEP +
                     FilterContract.COLUMN_ALARM_VOLUME + INTEGER_TYPE + COMMA_SEP +
@@ -128,7 +127,6 @@ public class FilterDBHelper extends SQLiteOpenHelper {
                 filterInfo.trigger = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_TRIGGER));
                 filterInfo.triggerID = cursor.getString(cursor.getColumnIndex(FilterContract.COLUMN_TRIGGER_ID));
                 filterInfo.bluetoothOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_BLUETOOTH));
-                filterInfo.gpsOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_GPS));
                 filterInfo.wifiOnOff = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_WIFI));
                 filterInfo.deviceVolume = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_DEVICE_VOLUME));
                 filterInfo.alarmVolume = cursor.getInt(cursor.getColumnIndex(FilterContract.COLUMN_ALARM_VOLUME));
@@ -151,7 +149,6 @@ public class FilterDBHelper extends SQLiteOpenHelper {
         values.put(FilterContract.COLUMN_TRIGGER, data.trigger);
         values.put(FilterContract.COLUMN_TRIGGER_ID, data.triggerID);
         values.put(FilterContract.COLUMN_BLUETOOTH, data.bluetoothOnOff);
-        values.put(FilterContract.COLUMN_GPS, data.gpsOnOff);
         values.put(FilterContract.COLUMN_WIFI, data.wifiOnOff);
         values.put(FilterContract.COLUMN_DEVICE_VOLUME, data.deviceVolume);
         values.put(FilterContract.COLUMN_ALARM_VOLUME, data.alarmVolume);

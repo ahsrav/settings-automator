@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.ahsrav.settingsautomator.database.FilterDBHelper;
 import com.ahsrav.settingsautomator.model.FilterInfo;
+import com.ahsrav.settingsautomator.util.ImplementSettingsUtil;
 
 public class BluetoothBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "BTBroadcastReceiver";
@@ -21,7 +22,7 @@ public class BluetoothBroadcastReceiver extends BroadcastReceiver {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             FilterInfo filter = dbHelper.getRowByConnection(device.getAddress(), FilterInfo.TRIGGER_TYPE_BLUETOOTH);
             if (filter != null) {
-                // Implement settings
+                ImplementSettingsUtil.implementSettings(filter, context);
             }
         }
     }
